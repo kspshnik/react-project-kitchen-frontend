@@ -1,12 +1,13 @@
 import React, { ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/hooks';
-import { setComment } from '../../store/commentFormSubSlice';
+import { setComment } from '../../store';
 import createCommentThunk from '../../thunks/create-comment-thunk';
 
 const CommentInput = () => {
   const { id: slug } = useParams();
-  const { image, username } = useSelector((state) => state.profile);
+  const image = useSelector((state) => state.profile.image) ?? '';
+  const username = useSelector((state) => state.profile.username) ?? '';
   const { comment } = useSelector((state) => state.forms.comment);
   const dispatch = useDispatch();
 
@@ -31,9 +32,9 @@ const CommentInput = () => {
       </div>
       <div className='card-footer'>
         <img
-          src={image!}
+          src={image}
           className='comment-author-img'
-          alt={username!} />
+          alt={username} />
         <button
           className='btn btn-sm btn-primary'
           type='submit'>

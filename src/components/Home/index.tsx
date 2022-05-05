@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from 'react';
-import { useDispatch, useSelector } from '../../services/hooks';
+import { useDispatch } from '../../services/hooks';
 import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';

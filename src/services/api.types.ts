@@ -59,6 +59,14 @@ export type TAPIArticle = {
   article : TArticle;
 };
 
+export type TAPIPatchArticleData = {
+  title?: string | null;
+  description?: string | null;
+  body?: string | null;
+  tagList?: TTags;
+  link?: string | null;
+};
+
 export type TAPITags = {
   tags: TTags;
 };

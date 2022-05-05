@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, useEffect } from 'react';
-import { batch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../../services/hooks';
 import {
@@ -9,8 +8,9 @@ import {
   setImageProfile,
 } from '../../../store';
 import { settingsResetUpdateSucceeded } from '../../../store/apiSlice';
-import { setPasswordProfile } from '../../../store/profileFormSubSlice';
+import { setFormProfile, setPasswordProfile } from '../../../store/profileFormSubSlice';
 import { patchCurrentUserThunk } from '../../../thunks';
+import { TProfile } from '../../../types/types';
 
 const SettingsForm: FC = () => {
   const {
@@ -26,13 +26,8 @@ const SettingsForm: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    batch(() => {
-      dispatch(setImageProfile(profile.image ?? ''));
-      dispatch(setUsernameProfile(profile.username ?? ''));
-      dispatch(setBioProfile(profile.bio ?? ''));
-      dispatch(setEmailProfile(profile.email ?? ''));
-    });
-  }, [dispatch, profile.bio, profile.email, profile.image, profile.username]);
+    dispatch(setFormProfile(profile as TProfile));
+  }, [dispatch, profile]);
 
   useEffect(() => {
     if (isSettingsUpdateSucceeded) {

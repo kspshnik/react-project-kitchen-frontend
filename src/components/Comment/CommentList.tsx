@@ -5,7 +5,7 @@ import getComments from '../../thunks/get-comments-thunk';
 import Comment from './Comment';
 
 const CommentList: FC = () => {
-  const { id: slug } = useParams();
+  const { id: slug = '' } = useParams();
   const dispatch = useDispatch();
   const comments = useSelector((store) => store.view.commentsFeed);
   const currentUserProfile = useSelector((store) => store.profile);
@@ -23,7 +23,7 @@ const CommentList: FC = () => {
         <Comment
           comment={comment}
           currentUserProfile={currentUserProfile}
-          slug={slug!}
+          slug={slug}
           key={comment.id} />
       ))}
     </div>

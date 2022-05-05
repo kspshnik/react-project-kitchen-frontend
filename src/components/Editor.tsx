@@ -14,11 +14,11 @@ import {
 import { postArticle, patchArticle } from '../services/api';
 import getArticleThunk from '../thunks/get-article-thunk';
 
-export const Editor: FC = () => {
+const Editor: FC = () => {
   const dispatch = useDispatch();
   const {
-    title, description, body, tags, tagList, image,
-  } = useSelector((state) => state.forms.article);
+    title, description, body, tags, tagList, link,
+  } = useSelector((state) => state.forms.article) ?? {};
   const { isArticleFetching } = useSelector((state) => state.api);
   const { slug } = useParams();
 
@@ -28,7 +28,7 @@ export const Editor: FC = () => {
     initialArticle?.tagList.forEach((el) => {
       dispatch(setTaglist(el));
     });
-  }, [initialArticle]);
+  }, [initialArticle, dispatch]);
 
   useEffect(() => {
     if (slug) {
@@ -38,7 +38,7 @@ export const Editor: FC = () => {
     return () => {
       dispatch(resetArticle());
     };
-  }, [dispatch]);
+  }, [dispatch, slug]);
 
   if (slug && isArticleFetching) {
     return <div>Подождите...</div>;
@@ -78,21 +78,28 @@ export const Editor: FC = () => {
   const submitForm = (e: SyntheticEvent<Element>) => {
     e.preventDefault();
 
-    slug ? patchArticle(
-      slug,
-      title!,
-      description!,
-      body!,
-      tagList,
-      image!,
-    )
-      : postArticle(
-        title!,
-        description!,
-        body!,
-        tagList,
-        image!,
-      );
+    if (slug) {
+      dispatch(patchArticle(
+        slug,
+        {
+          title,
+          description,
+          body,
+          tagList,
+          link,
+        },
+      ));
+    } else {
+      dispatch(postArticle(
+        {
+          title,
+          description,
+          body,
+          tagList,
+          link,
+        },
+      ));
+    }
   };
 
   return (
@@ -127,7 +134,7 @@ export const Editor: FC = () => {
                     className='form-control'
                     type='url'
                     placeholder='Article Image'
-                    value={image === '' ? '' : image || initialArticle?.link}
+                    value={link === '' ? '' : link || initialArticle?.link}
                     onChange={onChangeImage} />
                 </fieldset>
 
@@ -152,10 +159,12 @@ export const Editor: FC = () => {
                   <div className='tag-list'>
                     {(tagList || []).map((tag: string) => (
                       <span className='tag-default tag-pill' key={tag}>
-                        <i
+                        <button
                           className='ion-close-round'
-                          onClick={removeTagHandler(tag)} />
-                        {tag}
+                          onClick={removeTagHandler(tag)}
+                          type='button'>
+                          {tag}
+                        </button>
                       </span>
                     ))}
                   </div>
@@ -176,3 +185,5 @@ export const Editor: FC = () => {
     </div>
   );
 };
+
+export default Editor;

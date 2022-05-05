@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, {
   useEffect,
-  useState,
   ChangeEvent,
   SyntheticEvent,
   FC,
@@ -31,7 +30,7 @@ const Login: FC = () => {
     if (isLoggedIn) {
       navigate('/');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className='auth-page'>

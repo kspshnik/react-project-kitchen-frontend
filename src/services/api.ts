@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import {
-  API_ROOT, LOGIN_ROUTE, REGISTER_ROUTE, USER_ROUTE,
+  API_ROOT,
+  LOGIN_ROUTE,
+  REGISTER_ROUTE,
+  USER_ROUTE,
+  ARTICLES_ROUTE,
+  FEED_ROUTE, JWT,
+  PROFILES_ROUTE,
+  TAGS_ROUTE,
 } from '../constants';
 import {
   TAPINewUser,
@@ -15,7 +22,7 @@ import {
   TAPIComment,
   TAPIProfile,
   TAPIAuth,
-  TAPIPatchUserData,
+  TAPIPatchUserData, TAPIPatchArticleData,
 } from './api.types';
 import {
   IDeleteArticle,
@@ -34,10 +41,6 @@ import {
   IProfile,
   IRegisterUser,
 } from '../types/API.types';
-import {
-  ARTICLES_ROUTE, FEED_ROUTE, JWT, PROFILES_ROUTE, TAGS_ROUTE,
-} from '../constants/api.constants';
-import { TTags } from '../types/types';
 
 const defaultRequestConfig : AxiosRequestConfig = {
   baseURL: API_ROOT,
@@ -72,6 +75,33 @@ const makeParams = (
   }
   if (favorited) {
     res = { ...res, favorited };
+  }
+  return res;
+};
+
+const makeArticlePatchData = (data : TAPIPatchArticleData) : TAPIPatchArticleData => {
+  const {
+    title,
+    description,
+    body,
+    tagList,
+    link,
+  } = data;
+  let res : TAPIPatchArticleData = { };
+  if (title) {
+    res = { ...res, title };
+  }
+  if (description) {
+    res = { ...res, description };
+  }
+  if (body) {
+    res = { ...res, body };
+  }
+  if (tagList && tagList.length > 0) {
+    res = { ...res, tagList };
+  }
+  if (link) {
+    res = { ...res, link };
   }
   return res;
 };
@@ -161,7 +191,7 @@ export const patchCurrentUser : IPatchUser = (
       res = { ...res, bio };
     }
     if (image) {
-      res = { ...res, image };
+      res = { ...res, link: image };
     }
     return res;
   };
@@ -217,16 +247,10 @@ export const fetchArticle : IFetchArticle = (slug: string) : AxiosPromise<TAPIAr
 };
 
 export const postArticle : IPostArticle = (
-  title: string,
-  description: string,
-  body: string,
-  tagList: TTags,
-  link?: string,
+  articleData: TAPIPatchArticleData,
 ) : AxiosPromise<TAPIArticle> => {
   const postData = {
-    article: {
-      body, description, tagList, title, link,
-    },
+    article: makeArticlePatchData(articleData),
   };
 
   const requestConfig : AxiosRequestConfig = {
@@ -248,16 +272,10 @@ export const deleteArticle : IDeleteArticle = (slug: string) : AxiosPromise<null
 
 export const patchArticle : IPatchArticle = (
   slug: string,
-  title: string,
-  description: string,
-  body: string,
-  tagList: TTags,
-  link?:string,
+  articleData: TAPIPatchArticleData,
 ) : AxiosPromise<TAPIArticle> => {
   const patchData = {
-    article: {
-      body, description, tagList, title, link,
-    },
+    article: makeArticlePatchData(articleData),
   };
 
   const requestConfig : AxiosRequestConfig = {

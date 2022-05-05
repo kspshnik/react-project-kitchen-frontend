@@ -31,14 +31,14 @@ const profileSubSlice = createSlice({
       ...state, bio: action.payload,
     }),
     setImageProfile: (state: TProfileFormState, action: PayloadAction<string>) => ({
-      ...state, image: action.payload,
+      ...state, link: action.payload,
     }),
     setPasswordProfile: (state: TProfileFormState, action: PayloadAction<string>) => ({
       ...state, password: action.payload,
     }),
     setFormProfile: (
       state: TProfileFormState,
-      action: PayloadAction<TUser & { password: string }>,
+      action: PayloadAction<TUser>,
     ) => ({
       ...state, ...action.payload,
     }),

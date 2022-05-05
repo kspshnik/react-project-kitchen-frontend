@@ -4,12 +4,11 @@ import {
   TAPIArticles,
   TAPIAuth,
   TAPIComment,
-  TAPIComments, TAPIParamsObject,
+  TAPIComments, TAPIParamsObject, TAPIPatchArticleData,
   TAPIProfile,
   TAPITags,
   TAPIUser,
 } from '../services/api.types';
-import { TTags } from './types';
 
 export interface IRegisterUser {
   (username: string, email: string, password: string) : AxiosPromise<TAPIAuth>;
@@ -44,12 +43,7 @@ export interface IFetchArticle {
 }
 
 export interface IPostArticle {
-  (title: string,
-    description: string,
-    body: string,
-    tagList: TTags,
-    link?: string,
-  ) : AxiosPromise<TAPIArticle>;
+  (articleData: TAPIPatchArticleData) : AxiosPromise<TAPIArticle>;
 }
 
 export interface IDeleteArticle {
@@ -57,12 +51,7 @@ export interface IDeleteArticle {
 }
 
 export interface IPatchArticle {
-  (slug: string,
-    title: string,
-    description: string,
-    body: string,
-    tagList: TTags,
-    link?: string,) : AxiosPromise<TAPIArticle>;
+  (slug: string, data: TAPIPatchArticleData,) : AxiosPromise<TAPIArticle>;
 }
 
 export interface ILikeArticle {

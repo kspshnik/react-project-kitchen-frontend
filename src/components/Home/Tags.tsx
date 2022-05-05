@@ -15,7 +15,6 @@ const Tags: FC = () => {
           tags.map((tag) => {
             const handleClick = (ev:React.MouseEvent) => {
               ev.preventDefault();
-              console.log(`Click on tag '${tag}'`);
               batch(() => {
                 dispatch(setTag(tag));
                 dispatch(setFeedType(FeedTypes.tags));

@@ -24,7 +24,7 @@ const ArticleActions: FC<{ article: TArticle, canModify: boolean }> = ({ article
           Edit Article
         </Link>
 
-        <button className='btn btn-outline-danger btn-sm' onClick={del}>
+        <button type='button' className='btn btn-outline-danger btn-sm' onClick={del}>
           <i className='ion-trash-a' />
           {' '}
           Delete Article
